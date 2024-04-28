@@ -1,10 +1,11 @@
 package dev.bhargav.productservice.Controller;
 
+import dev.bhargav.productservice.Service.ProductService;
+import dev.bhargav.productservice.dtos.Productrequestdto;
 import dev.bhargav.productservice.models.Product;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class ProductController {
@@ -16,12 +17,19 @@ public class ProductController {
     }
 
     @PostMapping("/products")
-    public void createProduct() {
-        // Break for 5 minutes: 10:38 -> 10:43
+    public Product createProduct(@RequestBody Productrequestdto productrequestdto) {
+        return productService.createProduct(
+                productrequestdto.getTitle(),
+                productrequestdto.getDescription(),
+                productrequestdto.getImage(),
+                productrequestdto.getCategory(),
+                productrequestdto.getPrice()
+        );
     }
 
     @GetMapping("/products")
-    public void getAllProducts() {
+    public List<Product> getAllProducts() {
+        return productService.getAllProducts();
 
     }
 
@@ -33,5 +41,11 @@ public class ProductController {
 
     public void deleteProduct(Long id) {
 
+    }
+
+    @GetMapping("/product/categories")
+    public String[] getallCategories()
+    {
+        return productService.getCategories();
     }
 }
