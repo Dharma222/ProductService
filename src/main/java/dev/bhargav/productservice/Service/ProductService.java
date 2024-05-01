@@ -15,5 +15,8 @@ public interface ProductService {
 
     public String[] getCategories();
 
+    public Product deleteProductbyId(Long id);
+
+
 
 }

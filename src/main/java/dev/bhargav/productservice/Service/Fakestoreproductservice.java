@@ -3,6 +3,9 @@ package dev.bhargav.productservice.Service;
 import dev.bhargav.productservice.dtos.Fakestoreproductdto;
 import dev.bhargav.productservice.models.Category;
 import dev.bhargav.productservice.models.Product;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -78,5 +81,20 @@ public class Fakestoreproductservice implements ProductService {
 
 
         return ans;
+    }
+
+    @Override
+    public Product deleteProductbyId(Long id) {
+
+
+        ResponseEntity<Fakestoreproductdto> fakestoreproductdto = restTemplate.
+                exchange
+                        ("https://fakestoreapi.com/products", HttpMethod.GET,null,
+                                Fakestoreproductdto.class,id);
+        Product product = fakestoreproductdto.getBody().toproduct();
+        return product;
+
+
+
     }
 }
