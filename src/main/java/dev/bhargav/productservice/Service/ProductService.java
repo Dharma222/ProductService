@@ -1,6 +1,8 @@
 package dev.bhargav.productservice.Service;
 
+import dev.bhargav.productservice.dtos.Fakestoreproductdto;
 import dev.bhargav.productservice.models.Product;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -17,6 +19,10 @@ public interface ProductService {
 
     public Product deleteProductbyId(Long id);
 
+    public Product updateProduct(Long id, String title, String description, String image, String category, double price);
 
 
 }
+
+
+

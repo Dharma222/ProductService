@@ -42,12 +42,24 @@ public class ProductController {
     @DeleteMapping("/products/delete/{id}")
     public Product deleteProduct(@PathVariable("id") Long id) {
         return productService.deleteProductbyId(id);
-
     }
 
     @GetMapping("/product/categories")
     public String[] getallCategories()
     {
         return productService.getCategories();
+    }
+
+    @PutMapping("/product/update/{id}")
+    public Product updateProduct(@PathVariable("id") Long id, @RequestBody Productrequestdto productrequestdto)
+    {
+
+        return productService.updateProduct(id,
+                productrequestdto.getTitle(),
+                productrequestdto.getDescription(),
+                productrequestdto.getImage(),
+                productrequestdto.getCategory(),
+                productrequestdto.getPrice()
+        );
     }
 }

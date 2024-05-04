@@ -4,9 +4,12 @@ import dev.bhargav.productservice.dtos.Fakestoreproductdto;
 import dev.bhargav.productservice.models.Category;
 import dev.bhargav.productservice.models.Product;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RequestCallback;
+import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -85,16 +88,64 @@ public class Fakestoreproductservice implements ProductService {
 
     @Override
     public Product deleteProductbyId(Long id) {
+//
+//        ResponseEntity<Fakestoreproductdto> fakestoreproductdto = (ResponseEntity<Fakestoreproductdto>) restTemplate.
+//                execute("https://fakestoreapi.com/products/{id}", HttpMethod.DELETE, (RequestCallback)null, (ResponseExtractor)null, id);
+//
+//                Product product = fakestoreproductdto.getBody().toproduct();
+//
+//        if (fakestoreproductdto.getStatusCode().is2xxSuccessful()) {
+//            System.out.println("Resource deleted successfully.");
+//        } else {
+//            System.out.println("Failed to delete resource. Status code: " + fakestoreproductdto.getStatusCodeValue());
+//        }
+//
+//        return product;
+
+        //restTemplate.getForObject()
 
 
-        ResponseEntity<Fakestoreproductdto> fakestoreproductdto = restTemplate.
-                exchange
-                        ("https://fakestoreapi.com/products", HttpMethod.GET,null,
-                                Fakestoreproductdto.class,id);
-        Product product = fakestoreproductdto.getBody().toproduct();
-        return product;
+        RequestCallback requestCallback = restTemplate.acceptHeaderRequestCallback(Fakestoreproductdto.class);
+        ResponseExtractor<ResponseEntity<Fakestoreproductdto>> responseExtractor = restTemplate.responseEntityExtractor(Fakestoreproductdto.class);
+        ResponseEntity<Fakestoreproductdto> response= restTemplate
+                .execute("https://fakestoreapi.com/products/{id}", HttpMethod.DELETE, requestCallback, responseExtractor,id);
 
+        Product product = response.getBody().toproduct();
+        return  product;
+    }
 
+    @Override
+    public Product updateProduct(Long id, String title, String description, String image, String category, double price) {
+        Fakestoreproductdto fakestoreproductdto = new Fakestoreproductdto();
+        fakestoreproductdto.setTitle(title);
+        fakestoreproductdto.setDescription(description);
+        fakestoreproductdto.setImage(image);
+        fakestoreproductdto.setCategory(category);
+        fakestoreproductdto.setPrice(price);
+
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<Fakestoreproductdto> httpEntity = new HttpEntity<Fakestoreproductdto>(fakestoreproductdto, headers);
+
+        RequestCallback requestCallback = restTemplate.httpEntityCallback(fakestoreproductdto, Fakestoreproductdto.class);
+        ResponseExtractor<ResponseEntity<Fakestoreproductdto>> responseExtractor = restTemplate.responseEntityExtractor(Fakestoreproductdto.class);
+        Fakestoreproductdto fakestoreproductdto1 = restTemplate.
+                execute("https://fakestoreapi.com/products/{id}", HttpMethod.PUT, requestCallback, responseExtractor, id).getBody();
+
+        return fakestoreproductdto1.toproduct();
+    }
+
+//        RequestCallback requestCallback = restTemplate.acceptHeaderRequestCallback(Fakestoreproductdto.class);
+//        ResponseExtractor<ResponseEntity<Fakestoreproductdto>> responseExtractor = restTemplate.responseEntityExtractor(Fakestoreproductdto.class);
+//        try {
+//            ResponseEntity<Fakestoreproductdto> response= restTemplate.execute("https://fakestoreapi.com/products/{id}", HttpMethod.PUT, requestCallback, responseExtractor,fakestoreproductdto);
+//            Product product = new Product();
+//            return fakestoreproductdto.toproduct();
+//        }
+//        catch (
+//                Exception exception
+//        )
+//        {System.out.println("Exception");}
+//
+//        return null;
 
     }
-}
