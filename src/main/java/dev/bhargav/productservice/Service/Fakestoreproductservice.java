@@ -15,7 +15,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
+@Service("FakestoreProductService")
 public class Fakestoreproductservice implements ProductService {
 
     private RestTemplate restTemplate;
@@ -24,6 +24,8 @@ public class Fakestoreproductservice implements ProductService {
     {
         this.restTemplate = restTemplate;
     }
+
+
     @Override
     public Product getSingleproduct(Long id) {
 
@@ -126,13 +128,20 @@ public class Fakestoreproductservice implements ProductService {
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<Fakestoreproductdto> httpEntity = new HttpEntity<Fakestoreproductdto>(fakestoreproductdto, headers);
 
+
         RequestCallback requestCallback = restTemplate.httpEntityCallback(fakestoreproductdto, Fakestoreproductdto.class);
         ResponseExtractor<ResponseEntity<Fakestoreproductdto>> responseExtractor = restTemplate.responseEntityExtractor(Fakestoreproductdto.class);
         Fakestoreproductdto fakestoreproductdto1 = restTemplate.
                 execute("https://fakestoreapi.com/products/{id}", HttpMethod.PUT, requestCallback, responseExtractor, id).getBody();
 
         return fakestoreproductdto1.toproduct();
+
+
+
+
     }
+
+    
 
 //        RequestCallback requestCallback = restTemplate.acceptHeaderRequestCallback(Fakestoreproductdto.class);
 //        ResponseExtractor<ResponseEntity<Fakestoreproductdto>> responseExtractor = restTemplate.responseEntityExtractor(Fakestoreproductdto.class);

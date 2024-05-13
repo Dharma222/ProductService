@@ -3,6 +3,8 @@ package dev.bhargav.productservice.Controller;
 import dev.bhargav.productservice.Service.ProductService;
 import dev.bhargav.productservice.dtos.Productrequestdto;
 import dev.bhargav.productservice.models.Product;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,7 +14,8 @@ public class ProductController {
 
     private ProductService productService;
 
-    public ProductController(ProductService productService) {
+    @Autowired
+    public ProductController(@Qualifier("selfProductService") ProductService productService) {
         this.productService = productService;
     }
 
