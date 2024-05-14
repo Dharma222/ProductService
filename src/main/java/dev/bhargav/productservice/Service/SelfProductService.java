@@ -4,10 +4,10 @@ import dev.bhargav.productservice.Repositories.CategoryRepository;
 import dev.bhargav.productservice.Repositories.ProductRepository;
 import dev.bhargav.productservice.models.Category;
 import dev.bhargav.productservice.models.Product;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service("selfProductService")
 public class SelfProductService implements ProductService{
@@ -22,8 +22,8 @@ public class SelfProductService implements ProductService{
     }
 
     @Override
-    public Product getSingleproduct(Long id) {
-        return null;
+    public Optional<Product> getSingleproduct(Long id) {
+        return productRepository.findById(id);
     }
 
     @Override
@@ -48,21 +48,37 @@ public class SelfProductService implements ProductService{
 
     @Override
     public List<Product> getAllProducts() {
-        return List.of();
+        return productRepository.findAll();
     }
 
     @Override
-    public String[] getCategories() {
-        return new String[0];
+    public List<Category> getCategories() {
+        List<Category> categories = categoryRepository.findAll();
+
+        return categories;
     }
 
     @Override
     public Product deleteProductbyId(Long id) {
+        productRepository.deleteById(id);
         return null;
     }
 
     @Override
-    public Product updateProduct(Long id, String title, String description, String image, String category, double price) {
-        return null;
+    public Product updateProduct(Long id, String title, String description, String image, String categorytitle, double price) {
+        Product product = new Product();
+        product.setId(id);
+        product.setTitle(title);
+        product.setDescription(description);
+        product.setImageUrl(image);
+        product.setPrice(price);
+        Category category1 = categoryRepository.findBytitle(categorytitle);
+        if(category1 == null) {
+            Category newCategory = new Category();
+            newCategory.setTitle(categorytitle);
+            category1 = categoryRepository.save(newCategory);
+        }
+        product.setCategory(category1);
+        return productRepository.save(product);
     }
 }

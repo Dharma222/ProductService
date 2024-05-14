@@ -2,12 +2,14 @@ package dev.bhargav.productservice.Controller;
 
 import dev.bhargav.productservice.Service.ProductService;
 import dev.bhargav.productservice.dtos.Productrequestdto;
+import dev.bhargav.productservice.models.Category;
 import dev.bhargav.productservice.models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class ProductController {
@@ -38,7 +40,7 @@ public class ProductController {
 
     // Jackson
     @GetMapping("/products/{id}")
-    public Product getProductById(@PathVariable("id") Long id) {
+    public Optional<Product> getProductById(@PathVariable("id") Long id) {
         return productService.getSingleproduct(id);
     }
 
@@ -48,7 +50,7 @@ public class ProductController {
     }
 
     @GetMapping("/product/categories")
-    public String[] getallCategories()
+    public List<Category> getallCategories()
     {
         return productService.getCategories();
     }

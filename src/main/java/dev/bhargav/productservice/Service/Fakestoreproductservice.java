@@ -14,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service("FakestoreProductService")
 public class Fakestoreproductservice implements ProductService {
@@ -27,7 +28,7 @@ public class Fakestoreproductservice implements ProductService {
 
 
     @Override
-    public Product getSingleproduct(Long id) {
+    public Optional<Product> getSingleproduct(Long id) {
 
 
         Fakestoreproductdto fakestoreproductdto =
@@ -45,7 +46,7 @@ public class Fakestoreproductservice implements ProductService {
         category.setTitle(fakestoreproductdto.getCategory());
         product.setCategory(category);
 
-        return product;
+        return Optional.of(product);
     }
 
     @Override
@@ -79,13 +80,15 @@ public class Fakestoreproductservice implements ProductService {
     }
 
     @Override
-    public String[] getCategories() {
+    public List<Category> getCategories() {
 
-        String[] ans = restTemplate.
-                getForObject("https://fakestoreapi.com/products/categories", String[].class);
+        List<Category> categories = new ArrayList<>();
+
+        categories = restTemplate.
+                getForObject("https://fakestoreapi.com/products/categories", List.class);
 
 
-        return ans;
+        return categories;
     }
 
     @Override
