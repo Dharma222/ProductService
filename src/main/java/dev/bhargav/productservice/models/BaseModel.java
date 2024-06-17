@@ -16,7 +16,7 @@ import java.util.Date;
 public class BaseModel {
 
     @Id// says this is primary key
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     private Long id;
 
